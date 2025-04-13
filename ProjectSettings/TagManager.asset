@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Stable
+  - Movable
+  - Down_Socket
+  - Right_Socket
+  - Left_Socket
+  - Up_Socket
+  - DownEnd
+  - UpEnd
+  - particle
+  - Center
+  - Pac
+  - Spider
+  - Puzzle
+  - ParticleStak
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Spider
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Web
+    uniqueID: 2971704971
+    locked: 0
+  - name: Spider
+    uniqueID: 630420355
+    locked: 0
+  m_RenderingLayers:
+  - Default
