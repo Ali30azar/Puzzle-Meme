@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 namespace Script
@@ -7,18 +8,19 @@ namespace Script
     public class EndGame : MonoBehaviour
     {
         [SerializeField] private GameObject parent;
-        [SerializeField] private GameObject particle;
+        // [SerializeField] private GameObject particle;
         [SerializeField] private GameObject centerPiece;
         [SerializeField] private GroupMovementSystem instance;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip winSounds;
-
-
+        [SerializeField] private string playNextScene;
+        
+        
         private bool _end;
 
         void Start()
         {
-            particle = Resources.Load<GameObject>("EdgeParticle");
+            // particle = Resources.Load<GameObject>("EdgeParticle");
             instance = GroupMovementSystem.Instance;
         }
 
@@ -56,10 +58,24 @@ namespace Script
 
             WinSound();
 
+            SpiderEndMove();
+
             p.transform.position = new Vector3(0, 0, 0);
-            Instantiate(particle, new Vector3(0, 0, 0), quaternion.identity);
+            // Instantiate(particle, new Vector3(0, 0, 0), quaternion.identity);
+            Invoke(nameof(NextScene), 9f);
 
             print("end"); //End check!!
+        }
+
+        private void NextScene()
+        {
+            SceneManager.LoadScene(playNextScene);
+        }
+
+        private void SpiderEndMove()
+        {
+            var spider = FindFirstObjectByType<Spider>();
+            spider.SpiderEndMove();
         }
     }
 }

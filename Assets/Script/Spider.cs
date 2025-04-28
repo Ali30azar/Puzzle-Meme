@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.Mathematics;
@@ -34,7 +35,8 @@ namespace Script
             Rage,
             GettingDamage,
             ThrowWeb,
-            Sleep
+            Sleep,
+            End
         }
 
         [SerializeField] private State currentState;
@@ -106,6 +108,9 @@ namespace Script
                     break;
                 case State.Sleep:
                     _currentStateAction = Sleep;
+                    break;
+                case State.End:
+                    _currentStateAction = SpiderEndMove;
                     break;
             }
         }
@@ -256,19 +261,34 @@ namespace Script
             if (!_rageSound)
             {
                 audioSource.Stop();
-                audioSource.PlayOneShot(spiderSounds[Random.Range(3, 7)]);
+                var length = spiderSounds.Length;
+                audioSource.PlayOneShot(spiderSounds[Random.Range(3, length)]);
                 _rageSound = true;
-            }
 
-            animator.Play(_angry);
+                animator.Play(_angry);
+            }
         }
 
         private void OnRageEnd()
         {
+            animator.speed = 0;
+            StartCoroutine(WaitForSoundThenMoveState());
+        }
+
+        private IEnumerator WaitForSoundThenMoveState()
+        {
+            while (audioSource.isPlaying)
+            {
+                yield return null;
+            }
+
             _rageSound = false;
+            animator.speed = 1;
             SetState(State.Movement);
-            if (hitCount < 3) return;
-            _counter = 3;
+            if (hitCount >= 3)
+            {
+                _counter = 3;
+            }
         }
 
         private void GettingDamage()
@@ -324,6 +344,18 @@ namespace Script
             _counter = num;
         }
 
+        public void SpiderEndMove()
+        {
+           animator.Play(_idle);
+           if (!_rageSound)
+           {
+               SetState(State.End);
+               var length = spiderSounds.Length;
+               audioSource.PlayOneShot(spiderSounds[Random.Range(3, length)]);
+               _rageSound = true;
+           }
+        }
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.CompareTag("DownEnd") || other.gameObject.CompareTag("UpEnd"))
